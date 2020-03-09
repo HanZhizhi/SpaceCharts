@@ -1,49 +1,63 @@
 package com.hrz.spacecharts;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
+import android.view.Menu;
 
-import com.space.charts.PieChart;
-import com.space.charts.PieData;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
-    private PieChart pieChart;
-    private List<PieData> pieData;
+
+    private AppBarConfiguration mAppBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        pieChart=findViewById(R.id.spacePie);
-        pieData=new ArrayList<>();
-        pieData.add(new PieData("哈哈哈",0.2f, Color.LTGRAY));
-        pieData.add(new PieData("非典",0.1f,Color.CYAN));
-        pieData.add(new PieData("否定对方的",0.3f,Color.BLUE));
-        pieData.add(new PieData("的深度",0.1f,Color.RED));
-        pieData.add(new PieData("二维",0.2f,Color.GREEN));
-        pieData.add(new PieData("让他认同",0.1f,Color.YELLOW));
-        try {
-            pieChart.setData(pieData);
-        }
-        catch (Exception e){
-            Log.i(TAG, "onCreate: "+e.getMessage());
-        }
-
-
-        PieChart.OnPieChartClickListener pieListener=new PieChart.OnPieChartClickListener() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void PieChartClickedAt(int position) {
-                Toast.makeText(MainActivity.this,pieData.get(position).getMsg(),Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
-        };
-        pieChart.setOnPieChartClickListener(pieListener);
+        });
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_home, R.id.nav_pieChart, R.id.nav_barChart)
+                .setDrawerLayout(drawer)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
     }
 }

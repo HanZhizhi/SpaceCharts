@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,8 +36,9 @@ public class PieChart extends View {
     private boolean clickMoved=false;
 
     //数据相关
-    private List<PieData> data;
-    private int[] degreeParts;
+    private List<PieDataBean> data;     //通过setData赋值，为空时不可点击
+    private float[] proportions;
+    private int[] degreeParts;          //绘制的每个扇形角度终点
 
     public PieChart(Context context) {
         this(context,null);
@@ -53,6 +53,7 @@ public class PieChart extends View {
         this.context=context;
         initAttr(attrs);
         initPaint();
+        //setClickable(false);
     }
 
     private void initAttr(AttributeSet attributeSet){
@@ -69,27 +70,35 @@ public class PieChart extends View {
         paint.setStyle(Paint.Style.FILL);
     }
 
-    public void setData(List<PieData> d) throws Exception{
-        float sum=0;
-        for(PieData p:d){
-            sum+=p.getProp();
+    public void setData(List<PieDataBean> d){
+        //TODO:自己算份额
+        float totalVlome=0;
+        for(PieDataBean p:d){
+            totalVlome+=p.getVolume();
         }
-        if(sum!=1)
-            throw new Exception("各部分比例之和不为一！！");
 
         this.data=d;
         degreeParts=new int[data.size()];
+        proportions=new float[data.size()];
+        int base=0;        //角度划分的起始点，仅用于计算，不是绘制的零度
+        for(int i=0;i<data.size();++i){
+            proportions[i]=data.get(i).getVolume() / totalVlome;
+            degreeParts[i]=base+(int)(proportions[i] * 360);
+            base=degreeParts[i];
+            Log.i(TAG, "setData: propor--"+proportions[i]+",终点角度："+degreeParts[i]);
+        }
         Log.i(TAG, "setData: dataLen--"+data.size());
 
-        int base=0;
-        float p;
+
+
+        /*float p;
         for(int i=0;i<data.size();++i){
-            p=data.get(i).getProp() * 360;
+            p=data.get(i).getVolume() * 360;
             degreeParts[i]=base+(int)p;
             base+=p;
         }
         for(int dd:degreeParts)
-            Log.i(TAG, "setData: degrePart--"+dd);
+            Log.i(TAG, "setData: degrePart--"+dd);*/
         invalidate();
     }
 
@@ -166,7 +175,7 @@ public class PieChart extends View {
                 int upX=(int)event.getX();
                 int upY=(int)event.getY();
                 Log.i(TAG, "onUp: x:"+upX+",y:"+upY);
-                if(clickListener!=null)
+                if(clickListener!=null && data!=null)
                 {
                     clickListener.PieChartClickedAt(calcPointToIndex(upX,upY));
                 }
@@ -249,6 +258,7 @@ public class PieChart extends View {
         int i=0;
         while(degreeParts[i]<deg)
             ++i;
+        Log.i(TAG, "calcPointToIndex: "+i);
         return i;
     }
 

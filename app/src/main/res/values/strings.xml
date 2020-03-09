@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">SpaceCharts</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">HanZhizhi</string>
+    <string name="nav_header_subtitle">Adnroid Charts by Space</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="nav_menu_pieChart">PieChart</string>
+    <string name="nav_menu_barChart">BarChart</string>
+
+    <string name="home_second">Home Second</string>
 </resources>

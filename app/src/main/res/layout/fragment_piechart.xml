@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:gravity="center_horizontal"
+    tools:context=".ui.piechart.PiechartFragment">
+
+    <com.space.charts.PieChart
+        android:id="@+id/piechart_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/text_gallery"
+        app:layout_constraintLeft_toLeftOf="@+id/text_gallery"
+        android:layout_gravity="center_horizontal"
+        app:width="200dp"
+        app:height="200dp"
+        app:background_color="#eeeeee"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="请输入内容"
+        android:layout_marginTop="20dp"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="输入数值"
+        android:inputType="numberDecimal"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="输入颜色"/>
+
+     <Button
+         android:id="@+id/btAddData"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="添加一项数据"
+         android:layout_marginTop="20dp"/>
+</LinearLayout>

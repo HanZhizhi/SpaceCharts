@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.hrz.spacecharts.ui.home.HomeFragment"
+        android:label="@string/nav_menu_pieChart"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_home_topieChart"
+            app:destination="@+id/nav_pieChart"/>
+        <action
+            android:id="@+id/action_nav_home_to_nav_barChart"
+            app:destination="@id/nav_barChart" />
+    </fragment>
+
+    <!--
+    <fragment
+        android:id="@+id/nav_home_second"
+        android:name="com.hrz.spacecharts.ui.home."
+        android:label="@string/home_second"
+        tools:layout="@layout/fragment_home_second">
+        <action
+            android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
+            app:destination="@id/nav_home" />
+
+        <argument
+            android:name="myArg"
+            app:argType="string" />
+    </fragment>
+    -->
+
+    <fragment
+        android:id="@+id/nav_pieChart"
+        android:name="com.hrz.spacecharts.ui.piechart.PiechartFragment"
+        android:label="test1"
+        tools:layout="@layout/fragment_piechart" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_barChart"
+        android:name="com.hrz.spacecharts.ui.barchart.BarchartFragment"
+        android:label="test2"
+        tools:layout="@layout/fragment_barchart" />
+</navigation>
