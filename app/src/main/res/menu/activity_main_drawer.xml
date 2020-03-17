@@ -12,5 +12,10 @@
             android:id="@+id/nav_barChart"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/nav_menu_barChart" />
+
+        <item
+            android:id="@+id/nav_snailChart"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="蜗牛图"/>
     </group>
 </menu>

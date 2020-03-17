@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="width" format="dimension"/>
+    <attr name="height" format="dimension"/>
+    <attr name="background_color" format="color"/>
+
     <declare-styleable name="PieChart">
-        <attr name="width" format="dimension"/>
-        <attr name="height" format="dimension"/>
-        <attr name="background_color" format="color"/>
+        <attr name="width"/>
+        <attr name="height"/>
+        <attr name="background_color"/>
+        <attr name="hollow" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="SpiralChart">
+        <attr name="width"/>
+        <attr name="height"/>
+        <attr name="background_color"/>
+        <attr name="style" format="integer"/>
     </declare-styleable>
 </resources>

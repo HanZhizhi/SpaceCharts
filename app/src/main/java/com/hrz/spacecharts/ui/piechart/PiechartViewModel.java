@@ -6,16 +6,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.space.charts.PieDataBean;
+import com.space.charts.PieChartData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PiechartViewModel extends ViewModel {
-    private List<PieDataBean> pieDatumBeans;
+    private List<PieChartData> pieDatumBeans;
 
     private MutableLiveData<String> mText;
-    private MutableLiveData<List<PieDataBean>> piechartData;
+    private MutableLiveData<List<PieChartData>> piechartData;
 
     public PiechartViewModel() {
         mText = new MutableLiveData<>();
@@ -25,12 +25,12 @@ public class PiechartViewModel extends ViewModel {
 
 
         pieDatumBeans =new ArrayList<>();
-        pieDatumBeans.add(new PieDataBean("哈哈哈",2f, Color.LTGRAY));
-        pieDatumBeans.add(new PieDataBean("非典",1f,Color.CYAN));
-        pieDatumBeans.add(new PieDataBean("否定对方的",3f,Color.BLUE));
-        pieDatumBeans.add(new PieDataBean("的深度",4f,Color.RED));
-        pieDatumBeans.add(new PieDataBean("二维",2f,Color.GREEN));
-        pieDatumBeans.add(new PieDataBean("让他认同",1f,Color.YELLOW));
+        pieDatumBeans.add(new PieChartData("哈哈哈",2f, Color.LTGRAY));
+        pieDatumBeans.add(new PieChartData("非典",1f,Color.CYAN));
+        pieDatumBeans.add(new PieChartData("否定对方的",3f,Color.BLUE));
+        pieDatumBeans.add(new PieChartData("的深度",4f,Color.RED));
+        pieDatumBeans.add(new PieChartData("二维",2f,Color.GREEN));
+        pieDatumBeans.add(new PieChartData("让他认同",1f,Color.YELLOW));
 
         piechartData.setValue(pieDatumBeans);
         /*try {
@@ -45,7 +45,7 @@ public class PiechartViewModel extends ViewModel {
         return mText;
     }
 
-    public LiveData<List<PieDataBean>> getPieDatumBeans() {
+    public LiveData<List<PieChartData>> getPieDatumBeans() {
         return piechartData;
     }
 }

@@ -1,11 +1,11 @@
 package com.space.charts;
 
-public class PieDataBean {
+public class PieChartData {
     private String msg;      //图上显示的信息
     private float volume;    //量
     private int color;       //绘制颜色
 
-    public PieDataBean(String info, float volume, int color){
+    public PieChartData(String info, float volume, int color){
         this.msg=info;
         this.volume =volume;
         this.color=color;

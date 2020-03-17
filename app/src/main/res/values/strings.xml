@@ -10,6 +10,7 @@
 
     <string name="nav_menu_pieChart">PieChart</string>
     <string name="nav_menu_barChart">BarChart</string>
+    <string name="nav_menu_snailChart">SnailChart</string>
 
     <string name="home_second">Home Second</string>
 </resources>

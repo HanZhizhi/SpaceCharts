@@ -7,8 +7,10 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -25,7 +27,9 @@ public class PieChart extends View {
     private int width,height,bgColor;
     private Context context;
     private Paint paint;
+    private TextPaint textPaint;
     private Rect rectBackground;
+    private boolean hollow;
 
     //动画相关
     private ValueAnimator vAnimator;
@@ -36,7 +40,7 @@ public class PieChart extends View {
     private boolean clickMoved=false;
 
     //数据相关
-    private List<PieDataBean> data;     //通过setData赋值，为空时不可点击
+    private List<PieChartData> data;     //通过setData赋值，为空时不可点击
     private float[] proportions;
     private int[] degreeParts;          //绘制的每个扇形角度终点
 
@@ -58,9 +62,10 @@ public class PieChart extends View {
 
     private void initAttr(AttributeSet attributeSet){
         TypedArray ta=context.obtainStyledAttributes(attributeSet,R.styleable.PieChart);
-        width=(int)ta.getDimension(R.styleable.PieChart_width,dp2px(200));
-        height=(int)ta.getDimension(R.styleable.PieChart_height,dp2px(200));
+        width=(int)ta.getDimension(R.styleable.PieChart_width,ChartUtils.dp2px(context,400));
+        height=(int)ta.getDimension(R.styleable.PieChart_height,ChartUtils.dp2px(context,200));
         bgColor=ta.getColor(R.styleable.PieChart_background_color,Color.WHITE);
+        hollow=ta.getBoolean(R.styleable.PieChart_hollow,false);
     }
 
     private void initPaint()
@@ -68,12 +73,17 @@ public class PieChart extends View {
         paint=new Paint();
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
+
+        textPaint=new TextPaint();
+        textPaint.setColor(Color.BLACK);
+        textPaint.setAlpha(90);
+        textPaint.setTextSize(50);
+        textPaint.setTextAlign(Paint.Align.CENTER);
     }
 
-    public void setData(List<PieDataBean> d){
-        //TODO:自己算份额
+    public void setData(List<PieChartData> d){
         float totalVlome=0;
-        for(PieDataBean p:d){
+        for(PieChartData p:d){
             totalVlome+=p.getVolume();
         }
 
@@ -88,8 +98,10 @@ public class PieChart extends View {
             Log.i(TAG, "setData: propor--"+proportions[i]+",终点角度："+degreeParts[i]);
         }
         Log.i(TAG, "setData: dataLen--"+data.size());
-
-
+        //TODO:优化计算
+        if (degreeParts[data.size()-1] != 360){
+            degreeParts[data.size()-1] = 360;
+        }
 
         /*float p;
         for(int i=0;i<data.size();++i){
@@ -116,6 +128,8 @@ public class PieChart extends View {
         paint.setColor(bgColor);
         canvas.drawRect(rectBackground,paint);
 
+        int centerX=getWidth()/2, centerY=getHeight()/2;
+
         if(data!=null){
             RectF oval = new RectF( 0,0,getWidth() , getHeight() );
             int s=startDegree;
@@ -123,22 +137,32 @@ public class PieChart extends View {
                 paint.setColor(data.get(i).getColor());
                 Log.i(TAG, "onDraw: s="+s+",span:"+degreeParts[i]);
                 canvas.drawArc(oval,s,degreeParts[i]-s,true,paint);
-                int midDegree=(s+degreeParts[i])/2, r=getHeight()/2-100;
-                float textX = midDegree>180 ? (float)Math.cos(Math.toRadians(360-midDegree))*r : (float)Math.cos(Math.toRadians(midDegree))*r;
-                textX = textX + getWidth()/2;
-                //float textY= midDegree>180 ? (float)Math.sin(Math.toRadians(360-midDegree))*r : (float)Math.sin(Math.toRadians(midDegree))*r;
-                float textY= (float)Math.sin(Math.toRadians(midDegree))*r;
-                Log.i(TAG, "onDraw: textY 1="+textY);
-                textY=textY + getHeight()/2;
-                Log.i(TAG, "onDraw: textY 2="+textY);
-                paint.setColor(Color.BLACK);
-                paint.setTextSize(50);
-                paint.setTextAlign(Paint.Align.CENTER);
-                canvas.drawText(data.get(i).getMsg(),textX,textY,paint);
+                s=degreeParts[i];
+            }
+
+            // 先画中空，再写文字
+            if (hollow){
+                RectF hollowRect = new RectF( 0,0,getWidth()/2 , getHeight()/2 );
+                paint.setColor(bgColor);
+                canvas.drawCircle(centerX , centerY,centerX/2 , paint);
+            }
+
+            s=startDegree;
+            for(int i=0;i<data.size();++i){
+                int midDegree=(s+degreeParts[i])/2, r=centerX-100;
+                Point textPoint=ChartUtils.polarCoordToRect(midDegree,r);
+                Log.i(TAG, "onDraw: origin text--x:"+textPoint.x+",y:"+textPoint.y);
+                textPoint.x += centerX;
+                textPoint.y += centerY;
+                int textRot= 90+midDegree; // 90-(midDegree%90);
+                Log.i(TAG, "onDraw: added text--x:"+textPoint.x+",y:"+textPoint.y+",midDegree:"+midDegree+",textRotation:"+textRot);
+                canvas.rotate(textRot,textPoint.x,textPoint.y);
+                canvas.drawText(data.get(i).getMsg(),textPoint.x,textPoint.y,textPaint);
+                canvas.rotate(-textRot,textPoint.x,textPoint.y);
                 s=degreeParts[i];
             }
         }
-        else{
+        else{     //为添加数据
             paint.setColor(Color.BLUE);
             //canvas.drawArc(500,500,1000,1000,0,120,true,paint);
             float x = getWidth() / 4;
@@ -163,15 +187,15 @@ public class PieChart extends View {
             case MotionEvent.ACTION_DOWN:
                 //Log.i(TAG, "onTouchEvent: x:"+event.getX()+",y:"+event.getY());
                 clickMoved=false;
-                return true;
+                break;
             case MotionEvent.ACTION_MOVE:
                 int moveX=(int)event.getX();
                 int moveY=(int)event.getY();
                 //Log.i(TAG, "onMove: x:"+moveX+",y:"+moveY+",在园内："+ DegreeInCircle(moveX,moveY));
                 clickMoved=true;
-                break;
+                return false;
             case MotionEvent.ACTION_UP:
-                if(clickMoved) return true;
+                if(clickMoved) return false;
                 int upX=(int)event.getX();
                 int upY=(int)event.getY();
                 Log.i(TAG, "onUp: x:"+upX+",y:"+upY);
@@ -260,11 +284,6 @@ public class PieChart extends View {
             ++i;
         Log.i(TAG, "calcPointToIndex: "+i);
         return i;
-    }
-
-    private int dp2px(float dp) {
-        float density = context.getResources().getDisplayMetrics().density;
-        return (int) (density * dp + 0.5f);
     }
 
     public void setOnPieChartClickListener(OnPieChartClickListener l){

@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_nav_home_to_nav_barChart"
             app:destination="@id/nav_barChart" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_snailChart"
+            app:destination="@id/nav_snailChart" />
     </fragment>
 
     <!--
@@ -47,4 +50,10 @@
         android:name="com.hrz.spacecharts.ui.barchart.BarchartFragment"
         android:label="test2"
         tools:layout="@layout/fragment_barchart" />
+
+    <fragment
+        android:id="@+id/nav_snailChart"
+        android:name="com.hrz.spacecharts.ui.snailchart.SnailFragment"
+        android:label="@string/nav_menu_snailChart"
+        tools:layout="@layout/fragment_snail"/>
 </navigation>
