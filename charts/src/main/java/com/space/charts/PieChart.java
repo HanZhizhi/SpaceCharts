@@ -117,7 +117,31 @@ public class PieChart extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(width,height);
+        int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);//宽的测量大小，模式
+        int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
+
+        int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);//高的测量大小，模式
+        int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
+
+        int w = widthSpecSize;   //定义测量宽，高(不包含测量模式),并设置默认值
+        int h = heightSpecSize;
+
+        //处理wrap_content的几种特殊情况
+        if (widthSpecMode == MeasureSpec.AT_MOST && heightSpecMode == MeasureSpec.AT_MOST) {
+            w = 700;  //单位是px
+            h = 700;
+        } else if (widthSpecMode == MeasureSpec.AT_MOST) {
+            //只要宽度布局参数为wrap_content， 宽度给固定值200dp(处理方式不一，按照需求来)
+            h = heightSpecSize;
+            w= h;
+        } else if (heightSpecMode == MeasureSpec.AT_MOST) {
+            w = widthSpecSize;
+            h = w;
+        }
+
+        height=h;
+        width=w;
+        setMeasuredDimension(w,h);
     }
 
     @Override

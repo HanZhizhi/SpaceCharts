@@ -11,13 +11,11 @@
 
     <com.space.charts.PieChart
         android:id="@+id/piechart_show"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         app:layout_constraintBottom_toTopOf="@+id/text_gallery"
         app:layout_constraintLeft_toLeftOf="@+id/text_gallery"
         android:layout_gravity="center_horizontal"
-        app:width="200dp"
-        app:height="200dp"
         app:background_color="#eeeeee"
         app:hollow="true"/>
 
