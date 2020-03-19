@@ -17,7 +17,7 @@ implementation 'com.github.HanZhizhi:SpaceCharts:0.x'
 
 ### 1.饼状图PieChart
 
-!!图片
+<img src="https://github.com/HanZhizhi/SpaceCharts/raw/master/gallery/PieChart.png" width="400px" height="350px" />
 
 布局文件：
 
@@ -46,6 +46,8 @@ pieChart.setData(pieDatumBeans);
 ```
 
 ### 2.螺线图SpiralChart
+
+<img src="https://github.com/HanZhizhi/SpaceCharts/raw/master/gallery/SpiralChart.png" width="500px" height="820px" />
 
 布局文件
 
