@@ -72,3 +72,4 @@ data.add(new SpiralChartData(strName,intValue));
 snailChart.setData(snailChartData);
 ```
 
+## 3.折线图LineChart
